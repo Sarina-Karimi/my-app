@@ -1,13 +1,41 @@
 import React from "react";
-import './App.css';
-import Weather from "./Weather"
+import "./App.css";
+import Weather from "./Weather";
+
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Hello world</h1>
+      <div className="weather-app">
         <Weather />
-      </header>
+
+        <footer>
+          This project was coded by{" "}
+          <a
+            href="https://github.com/Sarina-Karimi"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sarina Karimi
+          </a>
+          , is{" "}
+          <a
+            href="https://github.com/Sarina-Karimi/design-weather-app"
+            target="_blank"
+            rel="noreferrer"
+          >
+            open-sourced on GitHub
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://app.netlify.com/sites/my-weatherapp-sarina/overview"
+            target="_blank"
+            rel="noreferrer"
+          >
+            hosted on Netlify
+          </a>
+          .
+        </footer>
+      </div>
     </div>
   );
 }
