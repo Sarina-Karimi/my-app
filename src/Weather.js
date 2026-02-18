@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./App.css";
 
@@ -8,16 +8,18 @@ export default function Weather() {
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
 
-  useEffect(() => {
-    searchCity("Paris");
-  }, []);
+useEffect(() => {
+  searchCity("Paris");
+}, [searchCity]);
 
-  function searchCity(cityName) {
-    const apiKey = "b2a5adcct04b33178913oc335f405433";
-    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityName}&key=${apiKey}&units=metric`;
 
-    axios.get(apiUrl).then(handleResponse);
-  }
+const searchCity = useCallback((cityName) => {
+  const apiKey = "b2a5adcct04b33178913oc335f405433";
+  const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityName}&key=${apiKey}&units=metric`;
+
+  axios.get(apiUrl).then(handleResponse);
+}, []);
+
 
   function handleResponse(response) {
     setWeather(response.data);
