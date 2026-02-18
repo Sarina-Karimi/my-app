@@ -19,7 +19,7 @@ function App() {
           </a>
           , is{" "}
           <a
-            href="https://github.com/Sarina-Karimi/design-weather-app"
+            href="https://github.com/Sarina-Karimi/my-app"
             target="_blank"
             rel="noreferrer"
           >
@@ -27,7 +27,7 @@ function App() {
           </a>{" "}
           and{" "}
           <a
-            href="https://app.netlify.com/sites/my-weatherapp-sarina/overview"
+            href="https://app.netlify.com/projects/myreactweatherrapp/overview"
             target="_blank"
             rel="noreferrer"
           >
