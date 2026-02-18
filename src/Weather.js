@@ -3,41 +3,45 @@ import axios from "axios";
 import "./App.css";
 
 export default function Weather() {
-
   const [city, setCity] = useState("Paris");
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
 
-useEffect(() => {
-  searchCity("Paris");
-}, [searchCity]);
-
-
-const searchCity = useCallback((cityName) => {
-  const apiKey = "b2a5adcct04b33178913oc335f405433";
-  const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityName}&key=${apiKey}&units=metric`;
-
-  axios.get(apiUrl).then(handleResponse);
-}, []);
-
-
-  function handleResponse(response) {
-    setWeather(response.data);
-    getForecast(response.data.city);
-  }
-
-  function getForecast(city) {
+  // Forecast fetcher
+  const getForecast = useCallback((city) => {
     const apiKey = "b2a5adcct04b33178913oc335f405433";
     const apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
 
     axios.get(apiUrl).then((response) => {
       setForecast(response.data.daily);
     });
-  }
+  }, []);
+
+  // Main weather response handler
+  const handleResponse = useCallback(
+    (response) => {
+      setWeather(response.data);
+      getForecast(response.data.city);
+    },
+    [getForecast]
+  );
+
+  // Search function
+  const searchCity = useCallback(() => {
+    const apiKey = process.env.REACT_APP_API_KEY;
+    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+
+    axios.get(apiUrl).then(handleResponse);
+  }, [city, handleResponse]);
+
+  // Initial load
+  useEffect(() => {
+    searchCity();
+  }, [searchCity]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    searchCity(city);
+    searchCity();
   }
 
   function formatDate(timestamp) {
@@ -45,7 +49,13 @@ const searchCity = useCallback((cityName) => {
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const hours = date.getHours();
     const days = [
-      "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
     return `${days[date.getDay()]} ${hours}:${minutes}`;
   }
@@ -73,9 +83,7 @@ const searchCity = useCallback((cityName) => {
         <main>
           <div className="weather-app-data">
             <div>
-              <h1 className="weather-app-city">
-                {weather.city}
-              </h1>
+              <h1 className="weather-app-city">{weather.city}</h1>
 
               <p className="weather-app-details">
                 {formatDate(weather.time)}, {weather.condition.description}
@@ -117,9 +125,7 @@ const searchCity = useCallback((cityName) => {
 
                   <div className="weather-forecast-temperatures">
                     <div className="weather-forecast-temperature">
-                      <strong>
-                        {Math.round(day.temperature.maximum)}°
-                      </strong>
+                      <strong>{Math.round(day.temperature.maximum)}°</strong>
                     </div>
                     <div className="weather-forecast-temperature">
                       {Math.round(day.temperature.minimum)}°
